@@ -2,6 +2,8 @@ package funcionalidades;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,6 +65,9 @@ public class Metodos {
                 }
                 mdlTabla.addRow(x);
             }
+
+            fr.close();
+            br.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -70,7 +75,55 @@ public class Metodos {
         return mdlTabla;
     }
 
-    public Vector getVector() {
-        return vPrincipal;
+    public void eliminarTarea(int lineToRemove) {
+        try {
+
+            File inFile = new File("tareas.txt");
+
+            if (!inFile.isFile()) {
+                System.out.println("Parameter is not an existing file");
+                return;
+            }
+
+            //Construct the new file that will later be renamed to the original filename. 
+            File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
+
+            BufferedReader br = new BufferedReader(new FileReader("tareas.txt"));
+            PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+
+            String line = null;
+
+            //Read from the original file and write to the new 
+            //unless content matches data to be removed.
+            int numberOfLine = 0;
+
+            while ((line = br.readLine()) != null) {
+
+                if (numberOfLine != lineToRemove) {
+                    pw.println(line);
+                    pw.flush();
+                }
+
+                numberOfLine++;
+            }
+            pw.close();
+            br.close();
+
+            //Delete the original file
+            if (!inFile.delete()) {
+                System.out.println("Could not delete file");
+                return;
+            }
+
+            //Rename the new file to the filename the original file had.
+            if (!tempFile.renameTo(inFile)) {
+                System.out.println("Could not rename file");
+            }
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

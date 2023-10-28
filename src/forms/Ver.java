@@ -205,8 +205,6 @@ public class Ver extends javax.swing.JFrame {
         mostrarTabla();
         txt_fecha.setText("");
         txt_prioridad.setText("");
-        
-        System.out.println(metodos.getVector());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txt_prioridadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_prioridadKeyReleased
